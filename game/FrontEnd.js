@@ -17,18 +17,21 @@ var enemies;
 var enemybullets;
 var enemybullet;
 var enemiesalive = [];
-var nextEnemyfire = 0;
 var meter = 0;
 var Energy;
 var fireMode = false;
 var timer;
 
 
+
 //for testing purposes
 var testbutton;
+var tween; //enemy movement automatically
+var count = 0;
+var nextEnemyfire = 0; // enemy firing automatically
 
 //menu
-var button;
+// var button;
 
 
 
@@ -48,14 +51,6 @@ var mainGame = {
 
         meter = 0;
         background = game.add.tileSprite(0,0,3200,2000,'floor');
-
-        //enemy group
-        enemies = game.add.group();
-        enemies.enableBody = true;
-        enemies.setAll('outOfBoundsKill',true);
-        for(var i=0; i < 30; i++){
-            var enemy = enemies.create(game.world.randomX + Math.random() * 3000, game.world.randomY + Math.random() * 3000,'enemy');
-        }
 
         //player
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -80,6 +75,14 @@ var mainGame = {
         bullets.setAll('outOfBoundsKill', true);
         firebutton = game.input.activePointer;
 
+        //enemy group
+        enemies = game.add.group();
+        enemies.enableBody = true;
+        enemies.setAll('outOfBoundsKill',true);
+        for(var i=0; i < 30; i++){
+            var enemy = enemies.create(game.world.randomX + Math.random() * 3000, game.world.randomY + Math.random() * 3000,'enemy');
+        }
+
 
         //enemybullets group
         enemybullets = game.add.group();
@@ -93,6 +96,9 @@ var mainGame = {
         enemybullets.setAll('anchor.y',1);
 
 
+        //enemy bot movement, remove later
+        tween = game.add.tween(enemies).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+        tween.onLoop.add(move, this);
 
 
         //food group
@@ -243,6 +249,16 @@ function enemyfire(){
 
 }
 
+function move(){
+    if(count == 0){
+        enemies.x += 10;
+        count +=1;
+    }else{
+        enemies.x -=10;
+        count = 0;
+    }
+}
+
 function foodcollect(player,food){
     if(!fireMode){
         food.kill();
@@ -272,7 +288,7 @@ var menu ={
         var t = game.add.text(150, 150, "Arrow Keys to Move, Mouse Click to Shoot", {font: '24px Arial', fill: '#ffbf00'});
 
 
-        button = game.add.button(game.world.centerX - 50, 200, 'button', this.start, game);
+        var button = game.add.button(350, 200, 'button', this.start, game);
 
         // var key = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
         //
