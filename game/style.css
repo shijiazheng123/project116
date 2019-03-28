@@ -1,0 +1,96 @@
+
+body{
+    background-color: #ffbf00;
+}
+
+h1{
+    font-family: Courier, Times New Roman, serif;
+    text-align: center;
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:300%;
+    background:transparent;
+    color: #ff5050;
+}
+
+h2{
+    font-family: Geneva, Helvetica, sans-serif;
+    text-align: center;
+    margin-top: 0;
+    padding-top: 0;
+    color: #ffffff;
+    font-size: 100%;
+}
+
+#nameInput{
+    border-radius: 25px;
+    border-style: solid;
+    border-color: transparent;
+    background-color: rgba(255,255,255,.7);
+    margin: auto;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 50px;
+    width: 500px;
+    height: 200px;
+}
+.enter{
+    text-align: center;
+    margin: auto;
+    font-family: Geneva, Helvetica, sans-serif;
+    font-size: 200%;
+}
+.username{
+    width: 450px;
+    display:inline-block;
+    vertical-align: center;
+    margin-top: 30px;
+}
+.button{
+    font-size: 24px;
+    padding: 5px 10px;
+}
+.button2{
+    font-size: 24px;
+    padding: 5px 10px;
+}
+
+#game{
+    width: 800px;
+    height: 500px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 30px;
+    position:absolute;
+    left: 0;
+    right: 0;
+}
+
+#score{
+    border-style: solid;
+    border-color: transparent;
+    background-color: #ffbf00;
+    margin: auto;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 500px;
+    height: 400px;
+    font-size: 16px;
+    font-family: Arial;
+    text-align: center;
+    display:none;
+}
+
+br {
+    display: block; /* makes it have a width */
+    content: ""; /* clears default height */
+    margin-top: 0;
+}
