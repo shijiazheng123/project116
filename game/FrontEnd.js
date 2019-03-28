@@ -21,6 +21,7 @@ var meter = 0;
 var Energy;
 var fireMode = false;
 var timer;
+var scorenum = 0;
 
 
 
@@ -114,9 +115,9 @@ var mainGame = {
 
 
         //energy bar and scores
-        var score = "Score: 00000000000000";
-        var style = {font: "24px Arial"};
-        var t = game.add.text(515, 475, score, style);
+        score = "Score: " + scorenum;
+        style = {font: "24px Arial", align: "center"};
+        t = game.add.text(515, 475, score, style);
         t.fixedToCamera = true;
 
         var empty = game.add.sprite(0,475,'empty');
@@ -263,6 +264,7 @@ function foodcollect(player,food){
     if(!fireMode){
         food.kill();
         meter = meter + 10;
+        updateScore(30);
         Energy.energypercentage(meter);
     }
 }
@@ -270,6 +272,11 @@ function foodcollect(player,food){
 function deadenemy(bullet, enemy){
     bullet.kill();
     enemy.kill();
+}
+
+function updateScore(points){
+    scorenum = scorenum + points;
+    t.setText("Score: " + scorenum);
 }
 
 
