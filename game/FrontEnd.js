@@ -26,7 +26,7 @@ var scorenum = 0;
 
 
 //for testing purposes
-var testbutton;
+var testbutton; //to test specific functions, get rid of later
 var tween; //enemy movement automatically
 var count = 0;
 var nextEnemyfire = 0; // enemy firing automatically
@@ -50,6 +50,7 @@ var mainGame = {
     },
     create:function(){
 
+        scorenum = 0;
         meter = 0;
         background = game.add.tileSprite(0,0,3200,2000,'floor');
 
@@ -227,7 +228,7 @@ function fire(){
 
 function depleteMeter(){
     if(meter > 0){
-        meter = meter - 10
+        meter = meter - 10;
     }
 }
 
@@ -333,3 +334,4 @@ game.state.add('mainGame',mainGame);
 game.state.add('menu',menu);
 game.state.add('gameover',gameoverscreen);
 game.state.start('menu');
+
