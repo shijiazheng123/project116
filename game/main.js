@@ -30,3 +30,5 @@ app.on('ready', () => {
 })
 
 //app.on('ready', creatWindow())
+
+///hello
