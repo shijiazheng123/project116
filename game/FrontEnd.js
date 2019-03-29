@@ -264,7 +264,7 @@ function foodcollect(player,food){
     if(!fireMode){
         food.kill();
         meter = meter + 10;
-        updateScore(30);
+        scorenum = updateScore(30);
         Energy.energypercentage(meter);
     }
 }
@@ -274,10 +274,9 @@ function deadenemy(bullet, enemy){
     enemy.kill();
 }
 
-function updateScore(points){
+/*function updateScore(points){
     scorenum = scorenum + points;
-    t.setText("Score: " + scorenum);
-}
+}*/
 
 
 var menu ={
