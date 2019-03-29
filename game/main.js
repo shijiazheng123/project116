@@ -5,7 +5,7 @@ const url = require('url');
 // window var
 let wind;
 
-// function to create window
+// create window when app is ready
 app.on('ready', () => {
     wind = new BrowserWindow({width: 800, height: 600,
         icon: path.join(__dirname, 'assets/player.png')});
