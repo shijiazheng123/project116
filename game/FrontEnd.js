@@ -22,8 +22,9 @@ var Energy;
 var fireMode = false;
 var timer;
 var scorenum = 0;
-var pname = ""
-
+var pname = "";
+var t;
+var score;
 
 
 //for testing purposes
@@ -118,7 +119,7 @@ var mainGame = {
 
         //energy bar and scores
         score = ("Score: " + scorenum);
-        style = {font: "24px Arial", align: "center"};
+        var style = {font: "24px Arial", align: "center"};
         t = game.add.text(515, 475, score, style);
         t.fixedToCamera = true;
 
@@ -134,7 +135,7 @@ var mainGame = {
         timer.loop(500, depleteMeter, this);
         timer.start();
 
-        testbutton = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        // testbutton = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
         //get rid of testbutton when finished
 
@@ -193,7 +194,7 @@ var mainGame = {
         }
 
         //recording score
-        recordscore(scorenum)
+        recordscore(scorenum);
 
         //detecting bullet hitting player
         game.physics.arcade.overlap(bullets,enemies,deadenemy,null,this);
@@ -201,13 +202,13 @@ var mainGame = {
 
 
         //get rid of later
-        if (testbutton.isDown){
-            if(meter > 0 && meter >= 20){
-                meter = meter - 20;
-            }else if(meter <20){
-                meter = 0;
-            }
-        }
+        // if (testbutton.isDown){
+        //     if(meter > 0 && meter >= 20){
+        //         meter = meter - 20;
+        //     }else if(meter <20){
+        //         meter = 0;
+        //     }
+        // }
 
 
     },
@@ -269,7 +270,7 @@ function foodcollect(player,food){
         food.kill();
         meter = meter + 10;
         scorenum = updateScore(scorenum, 30);
-        t.setText = ("Score: " + scorenum);
+        t.setText("Score: " + scorenum);
         Energy.energypercentage(meter);
     }
 }
@@ -322,16 +323,18 @@ var gameoverscreen = {
         game.stage.backgroundColor = "#fff";
 
         var t = game.add.text(50,150,"you lose");
-        p = game.add.text(50,170,"User: " + getname());
-        s = game.add.text(50,190,"Score: " + getscore());
+        var p = game.add.text(50,170,"User: " + getname());
+        var s = game.add.text(50,190,"Score: " + getscore());
+
+        var leaderboard = game.add.text(50,250,"Leaderboard:\nperson: 9999999" +
+            "\nperson: 9999999\nperson: 9999999");
 
         var key = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         key.onDown.addOnce(this.start, this);
     },
     start: function () {
         game.state.start('menu');
-        var s = document.getElementById("nameInput");
-        s.style.display = "block";
+        showHome()
     }
 };
 

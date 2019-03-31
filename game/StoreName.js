@@ -8,14 +8,10 @@ function submit(){
     }
 }
 
-function score(){
-    var sc = document.getElementById("score");
-    sc.style.display = "block";
-}
 
-function back(){
-    var sc = document.getElementById("score");
-    sc.style.display = "none";
+function showHome(){
+    var s = document.getElementById("nameInput");
+    s.style.display = "block";
 }
 
 //blablabla
