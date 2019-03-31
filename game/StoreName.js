@@ -1,6 +1,9 @@
 function submit(){
+    name1 = document.getElementById("pname").value;
+    pname = name1;
+    recordname(pname);
     var s = document.getElementById("nameInput");
-    if(document.getElementById("name").value != ""){
+    if(document.getElementById("pname").value != ""){
         s.style.display = "none";
     }
 }

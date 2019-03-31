@@ -22,6 +22,7 @@ var Energy;
 var fireMode = false;
 var timer;
 var scorenum = 0;
+var pname = ""
 
 
 
@@ -116,7 +117,7 @@ var mainGame = {
 
 
         //energy bar and scores
-        score = "Score: " + scorenum;
+        score = ("Score: " + scorenum);
         style = {font: "24px Arial", align: "center"};
         t = game.add.text(515, 475, score, style);
         t.fixedToCamera = true;
@@ -191,6 +192,8 @@ var mainGame = {
             }
         }
 
+        //recording score
+        recordscore(scorenum)
 
         //detecting bullet hitting player
         game.physics.arcade.overlap(bullets,enemies,deadenemy,null,this);
@@ -265,7 +268,8 @@ function foodcollect(player,food){
     if(!fireMode){
         food.kill();
         meter = meter + 10;
-        scorenum = updateScore(30);
+        scorenum = updateScore(scorenum, 30);
+        t.setText = ("Score: " + scorenum);
         Energy.energypercentage(meter);
     }
 }
@@ -318,6 +322,8 @@ var gameoverscreen = {
         game.stage.backgroundColor = "#fff";
 
         var t = game.add.text(50,150,"you lose");
+        p = game.add.text(50,170,"User: " + getname());
+        s = game.add.text(50,190,"Score: " + getscore());
 
         var key = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         key.onDown.addOnce(this.start, this);
