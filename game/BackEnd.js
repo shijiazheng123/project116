@@ -98,18 +98,30 @@ suite('#during/after game', function() {
     test('should record and return player name', function () {
         recordname("Player1");
         assert.equal("Player1", getname());
+        assert.notEqual("", getname());
     })
     test('should record and return score', function () {
         recordscore(600);
         assert.equal(600, getscore());
+        assert.notEqual(0, getscore());
     })
     test('should return 50', function () {
         recordx(50);
         assert.equal(50, getx());
+        assert.notEqual(0, getx());
     })
     test('should return 80', function () {
         recordy(80);
         assert.equal(80, gety());
+        assert.notEqual(0, gety());
+    })
+
+    test('checks to see if it clears during the same instance', function () {
+        resetPlayer()
+        assert.notEqual("Player1", getname());
+        assert.notEqual(600, getscore());
+        assert.notEqual(50, getx());
+        assert.notEqual(80, gety());
     })
 })
 
@@ -130,6 +142,7 @@ suite('#score reset', function() {
 
 //Player with the highest score
 suite('#high score', function() {
+    //Assume dataset is already parsed for these tests
     test('returns player with the highest score in dictionary of players, pos num case', function () {
         var dataset = {1234: {name: "player1", score: 20, x: 0, y: 0}, 1235: {name: "player2", score: 30, x: 0, y: 0}};
         assert.equal(dataset[1235], highscore(dataset));
@@ -140,15 +153,41 @@ suite('#high score', function() {
         assert.equal(dataset[1234], highscore(dataset));
     })
 
+    //Testing if it works with JSON parse() and stringify()
+    test('returns player with the highest score in dictionary of players, pos num case', function () {
+        var dataset = {1234: {name: "player1", score: 20, x: 0, y: 0}, 1235: {name: "player2", score: 30, x: 0, y: 0}};
+        var JSONdataset = JSON.stringify(dataset);
+        var newdataset = JSON.parse(JSONdataset);
+        assert.equal(newdataset[1235], highscore(newdataset));
+    })
+
+    test('returns player with the highest score in dictionary of players, neg num case', function () {
+        var dataset = {1234: {name: "player1", score: 880, x: 0, y: 0}, 1235: {name: "player2", score: -110, x: 0, y: 0}, 1236: {name: "player3", score: 0, x: 0, y: 0}};
+        var JSONdataset = JSON.stringify(dataset);
+        var newdataset = JSON.parse(JSONdataset);
+        assert.equal(newdataset[1234], highscore(newdataset));
+    })
+
 })
 
 //Add & get a player
-suite('#Add and get', function() {
+suite('#add and get', function() {
+    //Assume parsed
     test('adds new player to player list, then gets this new player to confirm it has been added to array', function () {
         var dataset = {1234: {name: "player1", score: 20, x: 0, y: 0}, 1235: {name: "player2", score: 30, x: 0, y: 0}};
         var data = {name: "player3", score: 50, x: 0, y: 0};
         addplayer(dataset, data, 1236);
         assert.equal(dataset[1236], getplayer(dataset, 1236));
+    })
+
+    //Test with JSON
+    test('adds new player to player list, then gets this new player to confirm it has been added to array', function () {
+        var dataset = {1234: {name: "player1", score: 20, x: 0, y: 0}, 1235: {name: "player2", score: 30, x: 0, y: 0}};
+        var data = {name: "player3", score: 50, x: 0, y: 0};
+        var JSONdataset = JSON.stringify(dataset);
+        var newdataset = JSON.parse(JSONdataset);
+        addplayer(newdataset, data, 1236);
+        assert.equal(newdataset[1236], getplayer(newdataset, 1236));
     })
 
 })
