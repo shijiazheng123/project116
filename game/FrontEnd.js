@@ -249,7 +249,7 @@ function enemyfire(){
         var shoot = enemiesalive[random];
         enemybullet.reset(shoot.body.x, shoot.body.y);
 
-        game.physics.arcade.moveToObject(enemybullet,player, 300);
+        game.physics.arcade.moveToObject(enemybullet,player, 100);
         nextEnemyfire = game.time.now + 10;
     }
 
@@ -311,9 +311,9 @@ var menu ={
     }
 };
 
-function startGame(){
-    game.state.start('mainGame');
-}
+// function startGame(){
+//     game.state.start('mainGame');
+// }
 
 
 var gameoverscreen = {
