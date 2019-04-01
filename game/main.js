@@ -7,7 +7,7 @@ let wind;
 
 // create window when app is ready
 app.on('ready', () => {
-    wind = new BrowserWindow({width: 800, height: 600,
+    wind = new BrowserWindow({width: 1200, height: 1000,
         icon: path.join(__dirname, 'assets/player.png')});
 
     // load index.html
