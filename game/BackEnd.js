@@ -1,5 +1,7 @@
-var alldata = {}
 var data = {name: "", score: 0, x: 0, y: 0};
+
+
+//Set up of JSON for Socket.io usage.
 
 function updateScore(scorenum, points){
     totalscore = scorenum + points;
@@ -49,10 +51,31 @@ function gety(){
     return data.y
 }
 
+function highscore(dataset){
+    var tempscore = 0
+    var tempplayer
+    for(var id in dataset){
+        var player = dataset[id];
+        if(player.score > tempscore){
+            tempscore = player.score;
+            tempplayer = player;
+        }
+    }
+    return tempplayer;
+}
+
+function addplayer(dataset, data, id){
+    dataset[id] = data
+}
+
+function getplayer(dataset, id){
+    return dataset[id]
+}
+
 var assert = require('assert');
 
 
-//Before game starts, values should be blank.
+//Testing for: before game starts, values should be blank.
 suite('#before game', function() {
     test('should return empty string, name not instantiated', function () {
         //recordname("");
@@ -70,7 +93,7 @@ suite('#before game', function() {
     })
 })
 
-//New Player
+//Testing for: values changing after a player starts the game.
 suite('#during/after game', function() {
     test('should record and return player name', function () {
         recordname("Player1");
@@ -103,4 +126,29 @@ suite('#score reset', function() {
         assert.equal(0, getx());
         assert.equal(0, gety());
     })
+})
+
+//Player with the highest score
+suite('#high score', function() {
+    test('returns player with the highest score in dictionary of players, pos num case', function () {
+        var dataset = {1234: {name: "player1", score: 20, x: 0, y: 0}, 1235: {name: "player2", score: 30, x: 0, y: 0}};
+        assert.equal(dataset[1235], highscore(dataset));
+    })
+
+    test('returns player with the highest score in dictionary of players, neg num case', function () {
+        var dataset = {1234: {name: "player1", score: 880, x: 0, y: 0}, 1235: {name: "player2", score: -110, x: 0, y: 0}, 1236: {name: "player3", score: 0, x: 0, y: 0}};
+        assert.equal(dataset[1234], highscore(dataset));
+    })
+
+})
+
+//Add & get a player
+suite('#Add and get', function() {
+    test('adds new player to player list, then gets this new player to confirm it has been added to array', function () {
+        var dataset = {1234: {name: "player1", score: 20, x: 0, y: 0}, 1235: {name: "player2", score: 30, x: 0, y: 0}};
+        var data = {name: "player3", score: 50, x: 0, y: 0};
+        addplayer(dataset, data, 1236);
+        assert.equal(dataset[1236], getplayer(dataset, 1236));
+    })
+
 })
