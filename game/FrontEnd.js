@@ -88,7 +88,7 @@ var mainGame = {
         }
 
 
-        //enemybullets group
+        //enemy bullets group
         enemybullets = game.add.group();
         enemybullets.enableBody = true;
         enemybullets.physicsBodyType = Phaser.Physics.ARCADE;
