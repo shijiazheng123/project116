@@ -101,8 +101,8 @@ var mainGame = {
 
 
         //enemy bot movement, remove later
-        tween = game.add.tween(enemies).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-        tween.onLoop.add(move, this);
+        // tween = game.add.tween(enemies).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+        // tween.onLoop.add(move, this);
 
 
         //food group
@@ -171,9 +171,9 @@ var mainGame = {
         }
 
         //make enemy chefs fire, remove when it turns into multiplayer
-        if(game.time.now > nextEnemyfire){
-            enemyfire();
-        }
+        // if(game.time.now > nextEnemyfire){
+        //     enemyfire();
+        // }
 
 
         //checks if meter is full or empty to allow firing, when meter is full, start timer for depleting meter until it reaches 0
