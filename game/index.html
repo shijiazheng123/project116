@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href = "style.css">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>-->
+    <script src="/socket.io/socket.io.js"></script>
     <script src = "phaser.js"></script>
     <script src = "StoreName.js"></script>
     <script src = "FrontEnd.js"></script>
@@ -12,7 +13,7 @@
     <title>Chef Shooter</title>
 
 </head>
-<body>
+<body onload="initialize()">
 
 <h1>Chef Shooter</h1>
 <h2>ELIMINATE YOUR COMPETITION</h2>

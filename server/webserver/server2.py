@@ -3,13 +3,14 @@ import socket
 from threading import Thread
 from random import randint
 
-
 from flask import Flask, send_from_directory, request, render_template
-from flask_socketio import SocketIO
-import eventlet
-eventlet.monkey_patch()
+from flask_socketio import SocketIO, emit
 app = Flask(__name__)
 socket_server = SocketIO(app)
+
+import eventlet
+
+eventlet.monkey_patch()
 
 
 #@app.route('/')
@@ -30,14 +31,20 @@ sidToUsername = {}
 
 @socket_server.on('register')
 def got_message(username):
-    usernameToSid[username] = request.sid
-    sidToUsername[request.sid] = username
+    # usernameToSid[username] = request.sid
+    # sidToUsername[request.sid] = username
     print(username + " connected")
     # message = {"username": username, "action": "connected"}
     # send_to_js(message)
 
 # pls work
 
+
+
+
+# @socket_server.on('test')
+# def test(t):
+#     print(t)
 
 
 
@@ -50,14 +57,13 @@ def got_message(username):
 
  #   return render_template('game.html', username=username)
 
-
 @app.route('/')
 def index():
-    return send_from_directory('/Users/caseywhelan/IdeaProjects/project116cse/game', 'index.html')
+    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', 'index.html')
 
 @app.route('/<path:filename>')
 def static_files(filename):
-    return send_from_directory('/Users/caseywhelan/IdeaProjects/project116cse/game', filename)
+    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', filename)
 
 
 
@@ -65,6 +71,4 @@ def static_files(filename):
 #     app.run(debug=True, port=5000)
 
 print("listening on port 8080")
-
-
 socket_server.run(app, port=8080)

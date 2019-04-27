@@ -1,3 +1,23 @@
+var socket = io.connect();
+
+
+setUpSocket();
+
+function setUpSocket() {
+    socket.on('connect', function (event) {
+        // connected to server
+        socket.send('Hello Server!');
+    });
+
+}
+
+function initialize(){
+    // submit();
+    var username = JSON.stringify(getname());
+    socket.emit('register', 'blbla');
+}
+
+
 function submit(){
     name1 = document.getElementById("pname").value;
     pname = name1;
@@ -7,7 +27,7 @@ function submit(){
         s.style.display = "none";
     }
     // setUpSocket();
-    // initialize();
+    initialize();
 }
 
 
