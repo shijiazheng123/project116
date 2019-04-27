@@ -7,7 +7,7 @@ function submit(){
         s.style.display = "none";
     }
     // setUpSocket();
-    initialize();
+    // initialize();
 }
 
 

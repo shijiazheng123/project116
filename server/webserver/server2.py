@@ -28,8 +28,8 @@ sidToUsername = {}
 
 @socket_server.on('register')
 def got_message(username):
-    usernameToSid[username] = request.sid
-    sidToUsername[request.sid] = username
+    # usernameToSid[username] = request.sid
+    # sidToUsername[request.sid] = username
     print(username + " connected")
     # message = {"username": username, "action": "connected"}
     # send_to_js(message)
@@ -39,9 +39,7 @@ def got_message(username):
 
 
 
-@app.route('/')
-def start():
-    return send_from_directory('game', 'index.html')
+
 
 
 
@@ -55,10 +53,13 @@ def start():
  #   return render_template('game.html', username=username)
 
 
+@app.route('/')
+def index():
+    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', 'index.html')
 
 @app.route('/<path:filename>')
 def static_files(filename):
-    return send_from_directory('static', filename)
+    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', filename)
 
 
 

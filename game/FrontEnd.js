@@ -6,6 +6,27 @@ var game = new Phaser.Game(800,500,Phaser.AUTO,'game');
 var socket = io.connect({transports: ['websocket']});
 
 
+// function submit(){
+//     name1 = document.getElementById("pname").value;
+//     pname = name1;
+//     recordname(pname);
+//     var s = document.getElementById("nameInput");
+//     if(document.getElementById("pname").value != ""){
+//         s.style.display = "none";
+//     }
+//     // setUpSocket();
+//     // initialize();
+//     socket.emit('register', username);
+// }
+//
+//
+// function showHome(){
+//     var s = document.getElementById("nameInput");
+//     s.style.display = "block";
+// }
+
+setUpSocket();
+
 function setUpSocket() {
     socket.on('connect', function (event) {
         // connected to server
@@ -15,7 +36,9 @@ function setUpSocket() {
 }
 
 function initialize(){
-    socket.emit("register", getname());
+    // submit();
+    var username = JSON.stringify(getname());
+    socket.emit('register', 'blbla');
 }
 
 
@@ -418,6 +441,9 @@ var menu ={
         // key.onDown.addOnce(this.start, this);
     },
     start: function () {
+        // var username = getname();
+        //
+        // socket.emit('register', 'connected');
         // socket.emit("pressStart");
         game.state.start('mainGame');
     }
