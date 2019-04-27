@@ -2,45 +2,6 @@ var Phaser = Phaser || {};
 
 var game = new Phaser.Game(800,500,Phaser.AUTO,'game');
 
-//networking
-var socket = io.connect({transports: ['websocket']});
-
-
-// function submit(){
-//     name1 = document.getElementById("pname").value;
-//     pname = name1;
-//     recordname(pname);
-//     var s = document.getElementById("nameInput");
-//     if(document.getElementById("pname").value != ""){
-//         s.style.display = "none";
-//     }
-//     // setUpSocket();
-//     // initialize();
-//     socket.emit('register', username);
-// }
-//
-//
-// function showHome(){
-//     var s = document.getElementById("nameInput");
-//     s.style.display = "block";
-// }
-
-setUpSocket();
-
-function setUpSocket() {
-    socket.on('connect', function (event) {
-        // connected to server
-        socket.send('Hello Server!');
-    });
-
-}
-
-function initialize(){
-    // submit();
-   // username = JSON.stringify(getname());
-    socket.emit("register", getname());
-}
-
 
 //main game
 var background;
@@ -74,6 +35,10 @@ var nextEnemyfire = 0; // enemy firing automatically
 
 //menu
 // var button;
+
+
+
+
 
 function playerJoined(){
     player = game.add.sprite(game.world.centerX, game.world.centerY,'player');
@@ -441,10 +406,6 @@ var menu ={
         // key.onDown.addOnce(this.start, this);
     },
     start: function () {
-        // var username = getname();
-        //
-        // socket.emit('register', 'connected');
-        // socket.emit("pressStart");
         game.state.start('mainGame');
     }
 };

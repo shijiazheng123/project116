@@ -39,7 +39,9 @@ def got_message(username):
 
 # pls work
 
-
+@socket_server.on('start')
+def start():
+    print("start")
 
 
 # @socket_server.on('test')
@@ -48,18 +50,19 @@ def got_message(username):
 
 
 
-# @app.route('/game', methods=["POST", "GET"])
-# def game():
-#     if request.method == "POST":
-#         username = request.form.get('username')
-#     else:
-#         username = "guest" + str(randint(0, 100000))
+@app.route('/game', methods=["POST", "GET"])
+def game():
+    if request.method == "POST":
+        username = request.form.get('username')
+        print(username)
+    else:
+        username = "guest" + str(randint(0, 100000))
 
- #   return render_template('game.html', username=username)
+    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', 'index.html')
 
 @app.route('/')
 def index():
-    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', 'index.html')
+    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', 'startPage.html')
 
 @app.route('/<path:filename>')
 def static_files(filename):
