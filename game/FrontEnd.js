@@ -2,6 +2,22 @@ var Phaser = Phaser || {};
 
 var game = new Phaser.Game(800,500,Phaser.AUTO,'game');
 
+//networking
+var socket = io.connect({transports: ['websocket']});
+
+
+function setUpSocket() {
+    socket.on('connect', function (event) {
+        // connected to server
+        socket.send('Hello Server!');
+    });
+
+}
+
+function initialize(){
+    socket.emit("register", getname());
+}
+
 
 //main game
 var background;
@@ -13,10 +29,10 @@ var nextFire = 0;
 var food;
 var nextfood = 0;
 var fooddelay = 10;
-var enemies;
+var enemies = [];
 var enemybullets;
 var enemybullet;
-var enemiesalive = [];
+// var enemiesalive = [];
 var meter = 0;
 var Energy;
 var fireMode = false;
@@ -36,7 +52,68 @@ var nextEnemyfire = 0; // enemy firing automatically
 //menu
 // var button;
 
+function playerJoined(){
+    player = game.add.sprite(game.world.centerX, game.world.centerY,'player');
+    game.physics.enable(player,Phaser.Physics.ARCADE);
 
+    game.camera.follow(player);
+    game.camera.deadzone = new Phaser.Rectangle(300, 150, 100, 100);
+    player.body.collideWorldBounds = true;
+
+
+    bullets = game.add.group();
+    bullets.enableBody = true;
+    bullets.physicsBodyType = Phaser.Physics.ARCADE;
+
+    bullets.createMultiple(100, 'bullets');
+    bullets.setAll('checkWorldBounds', true);
+    bullets.setAll('outOfBoundsKill', true);
+
+}
+
+var enemyPlayer = function(user){
+    this.user = user;
+
+    this.player = game.add.sprite(game.world.centerX, game.world.centerY,'enemy');
+    game.physics.enable(player,Phaser.Physics.ARCADE);
+
+    game.camera.follow(player);
+    game.camera.deadzone = new Phaser.Rectangle(300, 150, 100, 100);
+    this.player.body.collideWorldBounds = true;
+
+    enemybullets = game.add.group();
+    enemybullets.enableBody = true;
+    enemybullets.physicsBodyType = Phaser.Physics.ARCADE;
+
+    enemybullets.createMultiple(10, 'enemybullets');
+    enemybullets.setAll('checkWorldBounds', true);
+    enemybullets.setAll('outOfBoundsKill', true);
+    enemybullets.setAll('anchor.x',0.5);
+    enemybullets.setAll('anchor.y',1);
+
+};
+
+function newPlayerJoined(data){
+
+    var info = JSON.parse(data);
+
+
+    var newEnemy = new enemyPlayer(info['username']);
+    enemies.push(newEnemy);
+}
+
+function enemyControls(data){
+
+    // var playerMoved =
+}
+
+function findId(id){
+    for (var i = 0; i < enemies.length; i++) {
+        if (enemies[i].user == id) {
+            return enemies[i];
+        }
+    }
+}
 
 
 var mainGame = {
@@ -56,48 +133,50 @@ var mainGame = {
         meter = 0;
         background = game.add.tileSprite(0,0,3200,2000,'floor');
 
-        //player
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.world.setBounds(0,0,3000,1800);
 
-        player = game.add.sprite(game.world.centerX, game.world.centerY,'player');
-        game.physics.enable(player,Phaser.Physics.ARCADE);
+        socket.on("start", playerJoined);
 
-        game.camera.follow(player);
-        game.camera.deadzone = new Phaser.Rectangle(300, 150, 100, 100);
-        player.body.collideWorldBounds = true;
+        //player
+        // player = game.add.sprite(game.world.centerX, game.world.centerY,'player');
+        // game.physics.enable(player,Phaser.Physics.ARCADE);
+        //
+        // game.camera.follow(player);
+        // game.camera.deadzone = new Phaser.Rectangle(300, 150, 100, 100);
+        // player.body.collideWorldBounds = true;
 
         //set up controllers
         cursors = game.input.keyboard.createCursorKeys();
         //bullets group
-        bullets = game.add.group();
-        bullets.enableBody = true;
-        bullets.physicsBodyType = Phaser.Physics.ARCADE;
-
-        bullets.createMultiple(100, 'bullets');
-        bullets.setAll('checkWorldBounds', true);
-        bullets.setAll('outOfBoundsKill', true);
+        // bullets = game.add.group();
+        // bullets.enableBody = true;
+        // bullets.physicsBodyType = Phaser.Physics.ARCADE;
+        //
+        // bullets.createMultiple(100, 'bullets');
+        // bullets.setAll('checkWorldBounds', true);
+        // bullets.setAll('outOfBoundsKill', true);
         firebutton = game.input.activePointer;
 
         //enemy group
-        enemies = game.add.group();
-        enemies.enableBody = true;
-        enemies.setAll('outOfBoundsKill',true);
-        for(var i=0; i < 30; i++){
-            var enemy = enemies.create(game.world.randomX + Math.random() * 3000, game.world.randomY + Math.random() * 3000,'enemy');
-        }
+        // enemies = game.add.group();
+        // enemies.enableBody = true;
+        // enemies.setAll('outOfBoundsKill',true);
+        // for(var i=0; i < 30; i++){
+        //     var enemy = enemies.create(game.world.randomX + Math.random() * 3000, game.world.randomY + Math.random() * 3000,'enemy');
+        // }
 
 
         //enemy bullets group
-        enemybullets = game.add.group();
-        enemybullets.enableBody = true;
-        enemybullets.physicsBodyType = Phaser.Physics.ARCADE;
-
-        enemybullets.createMultiple(10, 'enemybullets');
-        enemybullets.setAll('checkWorldBounds', true);
-        enemybullets.setAll('outOfBoundsKill', true);
-        enemybullets.setAll('anchor.x',0.5);
-        enemybullets.setAll('anchor.y',1);
+        // enemybullets = game.add.group();
+        // enemybullets.enableBody = true;
+        // enemybullets.physicsBodyType = Phaser.Physics.ARCADE;
+        //
+        // enemybullets.createMultiple(10, 'enemybullets');
+        // enemybullets.setAll('checkWorldBounds', true);
+        // enemybullets.setAll('outOfBoundsKill', true);
+        // enemybullets.setAll('anchor.x',0.5);
+        // enemybullets.setAll('anchor.y',1);
 
 
         //enemy bot movement, remove later
@@ -255,15 +334,15 @@ function enemyfire(){
 
 }
 
-function move(){
-    if(count == 0){
-        enemies.x += 10;
-        count +=1;
-    }else{
-        enemies.x -=10;
-        count = 0;
-    }
-}
+// function move(){
+//     if(count == 0){
+//         enemies.x += 10;
+//         count +=1;
+//     }else{
+//         enemies.x -=10;
+//         count = 0;
+//     }
+// }
 
 function foodcollect(player,food){
     if(!fireMode){
@@ -307,13 +386,11 @@ var menu ={
         // key.onDown.addOnce(this.start, this);
     },
     start: function () {
+        socket.emit("pressStart");
         game.state.start('mainGame');
     }
 };
 
-// function startGame(){
-//     game.state.start('mainGame');
-// }
 
 
 var gameoverscreen = {
