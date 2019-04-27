@@ -6982,7 +6982,7 @@ Narrowphase.prototype.convexHeightfield = function (convexBody,convexShape,conve
      * @param  {String} event.type
      * @return {EventEmitter} The self object, for chainability.
      */
-                emit: function (event)
+                emit: function (event, name)
                 {
                     if (this._listeners === undefined)
                     {
@@ -9250,7 +9250,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
                 this.idleTime = 0;
                 if(s !== Body.AWAKE)
                 {
-                    this.emit(Body.wakeUpEvent);
+                    this.emit(Body.wakeUpEvent, getname());
                 }
             };
 
@@ -9265,7 +9265,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
                 this.angularForce = 0;
                 vec2.set(this.velocity,0,0);
                 vec2.set(this.force,0,0);
-                this.emit(Body.sleepEvent);
+                this.emit(Body.sleepEvent, getname());
             };
 
             /**
@@ -14138,7 +14138,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
                 // postBroadphase event
                 this.postBroadphaseEvent.pairs = result;
-                this.emit(this.postBroadphaseEvent);
+                this.emit(this.postBroadphaseEvent, getname());
                 this.postBroadphaseEvent.pairs = null;
 
                 // Narrowphase
@@ -14201,7 +14201,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
                         e.shapeB = data.shapeB;
                         e.bodyA = data.bodyA;
                         e.bodyB = data.bodyB;
-                        this.emit(e);
+                        this.emit(e, getname());
                     }
                     endOverlaps.length = 0;
                 }
@@ -14209,7 +14209,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
                 var preSolveEvent = this.preSolveEvent;
                 preSolveEvent.contactEquations = np.contactEquations;
                 preSolveEvent.frictionEquations = np.frictionEquations;
-                this.emit(preSolveEvent);
+                this.emit(preSolveEvent, getname());
                 preSolveEvent.contactEquations = preSolveEvent.frictionEquations = null;
 
                 // update constraint equations
@@ -14296,7 +14296,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
                             ev.shapeA = eq.shapeA;
                             ev.shapeB = eq.shapeB;
                             ev.contactEquation = eq;
-                            this.emit(ev);
+                            this.emit(ev, getname());
                         }
                     }
                 }
@@ -14339,7 +14339,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
                 }
                 bodiesToBeRemoved.length = 0;
 
-                this.emit(this.postStepEvent);
+                this.emit(this.postStepEvent, getname());
             };
 
             /**
@@ -14469,7 +14469,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
                                 }
                             }
 
-                            this.emit(e);
+                            this.emit(e, getname());
                         }
 
                         // divide the max friction force by the number of contacts
@@ -14497,7 +14497,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
                 this.springs.push(spring);
                 var evt = this.addSpringEvent;
                 evt.spring = spring;
-                this.emit(evt);
+                this.emit(evt, getname());
                 evt.spring = null;
             };
 
@@ -14536,7 +14536,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
                     body.world = this;
                     var evt = this.addBodyEvent;
                     evt.body = body;
-                    this.emit(evt);
+                    this.emit(evt, getname());
                     evt.body = null;
                 }
             };
@@ -14562,7 +14562,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
                         Utils.splice(this.bodies,idx,1);
                         this.removeBodyEvent.body = body;
                         body.resetConstraintVelocity();
-                        this.emit(this.removeBodyEvent);
+                        this.emit(this.removeBodyEvent, getname());
                         this.removeBodyEvent.body = null;
                     }
                 }

@@ -37,8 +37,8 @@ function setUpSocket() {
 
 function initialize(){
     // submit();
-    var username = JSON.stringify(getname());
-    socket.emit('register', 'blbla');
+   // username = JSON.stringify(getname());
+    socket.emit("register", getname());
 }
 
 
