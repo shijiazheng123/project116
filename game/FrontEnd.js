@@ -104,7 +104,16 @@ function newPlayerJoined(data){
 
 function enemyControls(data){
 
-    // var playerMoved =
+    var info = JSON.parse(data);
+    var playerMoved = findId(info['username']);
+
+    if(!playerMoved){
+        return;
+    }
+
+    playerMoved.player.body.x = info['x'];
+    playerMoved.player.body.y = info['y'];
+
 }
 
 function findId(id){
@@ -113,6 +122,19 @@ function findId(id){
             return enemies[i];
         }
     }
+}
+
+
+function playerDied(data){
+    var info = JSON.parse(data);
+    var deadPlayer = findId(info['username']);
+
+    if(!deadPlayer){
+        return;
+    }
+
+    deadPlayer.player.destroy();
+    enemies.splice(enemies.indexOf(deadPlayer), 1);
 }
 
 
@@ -126,6 +148,9 @@ var mainGame = {
         game.load.image('food','assets/food.png');
         game.load.image('energy', 'assets/energybar.png');
         game.load.image('empty', 'assets/energybarempty.png');
+
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+        game.world.setBounds(0,0,3000,1800);
     },
     create:function(){
 
@@ -133,10 +158,9 @@ var mainGame = {
         meter = 0;
         background = game.add.tileSprite(0,0,3200,2000,'floor');
 
-        game.physics.startSystem(Phaser.Physics.ARCADE);
-        game.world.setBounds(0,0,3000,1800);
+        playerJoined();
 
-        socket.on("start", playerJoined);
+        // socket.on("start", playerJoined);
 
         //player
         // player = game.add.sprite(game.world.centerX, game.world.centerY,'player');
@@ -214,6 +238,10 @@ var mainGame = {
         timer.loop(500, depleteMeter, this);
         timer.start();
 
+
+
+
+
         // testbutton = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
         //get rid of testbutton when finished
@@ -249,6 +277,8 @@ var mainGame = {
             player.body.velocity.y = -200;
         }
 
+        // socket.emit('move_player', JSON.stringify({"username": getname(), "x": player.body.x, "y": player.body.y}));
+
         //make enemy chefs fire, remove when it turns into multiplayer
         // if(game.time.now > nextEnemyfire){
         //     enemyfire();
@@ -271,6 +301,8 @@ var mainGame = {
                 fire();
             }
         }
+
+        //socket.emit('fire', JSON.stringify({"username": getname(), "x": player.body.x, "y": player.body.y}))
 
         //recording score
         recordscore(scorenum);
@@ -386,7 +418,7 @@ var menu ={
         // key.onDown.addOnce(this.start, this);
     },
     start: function () {
-        socket.emit("pressStart");
+        // socket.emit("pressStart");
         game.state.start('mainGame');
     }
 };

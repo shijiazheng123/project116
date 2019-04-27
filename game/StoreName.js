@@ -6,7 +6,7 @@ function submit(){
     if(document.getElementById("pname").value != ""){
         s.style.display = "none";
     }
-    setUpSocket();
+    // setUpSocket();
     initialize();
 }
 
