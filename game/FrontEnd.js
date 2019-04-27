@@ -36,10 +36,6 @@ var nextEnemyfire = 0; // enemy firing automatically
 //menu
 // var button;
 
-
-
-
-
 function playerJoined(){
     player = game.add.sprite(game.world.centerX, game.world.centerY,'player');
     game.physics.enable(player,Phaser.Physics.ARCADE);
@@ -406,6 +402,7 @@ var menu ={
         // key.onDown.addOnce(this.start, this);
     },
     start: function () {
+        pressedPlay();
         game.state.start('mainGame');
     }
 };
