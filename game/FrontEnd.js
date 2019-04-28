@@ -5,23 +5,10 @@ var socket = io.connect({transports: ['websocket']});
 
 setUpSocket();
 
-// socket.on('saveName', function (event) {
-//     recordname(event);
-//     socket.emit('gotname', getname());
-// });
+socket.on('message', function (event) {
+    console.log(event);
+});
 
-function submit(){
-    var pname = document.getElementById("name").value;
-    // var pname = name1;
-    // console.log(pname);
-    // recordname(pname);
-    // console.log(getname());
-    // var s = document.getElementById("nameInput");
-    // if(document.getElementById("pname").value != ""){
-    //     s.style.display = "none";
-    // }
-
-}
 
 function setUpSocket() {
     socket.on('connect', function (event) {
@@ -29,14 +16,10 @@ function setUpSocket() {
         socket.send('Hello Server!');
     });
 
-
-
 }
 
 function initialize(username){
-    // recordname("adfaddf");
     console.log(username);
-    // var username = getname();
     socket.emit("register", username);
 
 }

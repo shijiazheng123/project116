@@ -33,10 +33,13 @@ sidToUsername = {}
 
 @socket_server.on('register')
 def got_message(username):
-    # usernameToSid[username] = request.sid
-    # sidToUsername[request.sid] = username
+    usernameToSid[username] = request.sid
+    sidToUsername[request.sid] = username
     print(username + " connected")
-    # message = {"username": username, "action": "connected"}
+    user_socket = usernameToSid.get(username, None)
+    message = {"username": username, "action": "connected"}
+    if user_socket:
+        socket_server.emit('message', message, room=user_socket)
     # send_to_js(message)
 
 # pls work
