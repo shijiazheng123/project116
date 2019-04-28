@@ -5,16 +5,40 @@ var socket = io.connect({transports: ['websocket']});
 
 setUpSocket();
 
+// socket.on('saveName', function (event) {
+//     recordname(event);
+//     socket.emit('gotname', getname());
+// });
+
+function submit(){
+    var pname = document.getElementById("name").value;
+    // var pname = name1;
+    // console.log(pname);
+    // recordname(pname);
+    // console.log(getname());
+    // var s = document.getElementById("nameInput");
+    // if(document.getElementById("pname").value != ""){
+    //     s.style.display = "none";
+    // }
+
+}
+
 function setUpSocket() {
     socket.on('connect', function (event) {
         // connected to server
         socket.send('Hello Server!');
     });
 
+
+
 }
 
-function initialize(){
-    socket.emit("register", "connected");
+function initialize(username){
+    // recordname("adfaddf");
+    console.log(username);
+    // var username = getname();
+    socket.emit("register", username);
+
 }
 
 function pressedPlay(){
@@ -22,6 +46,8 @@ function pressedPlay(){
 }
 
 var game = new Phaser.Game(800,500,Phaser.AUTO,'game');
+
+//pls show you disablled
 
 
 //main game
@@ -448,7 +474,7 @@ var gameoverscreen = {
     },
     start: function () {
         game.state.start('menu');
-        showHome()
+        // showHome()
     }
 };
 

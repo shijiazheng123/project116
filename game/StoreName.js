@@ -26,21 +26,24 @@
 // }
 
 
-function submit(){
-    name1 = document.getElementById("pname").value;
-    pname = name1;
-    recordname(pname);
-    var s = document.getElementById("nameInput");
-    if(document.getElementById("pname").value != ""){
-        s.style.display = "none";
-    }
 
-}
+// function submit(){
+//     var pname = document.getElementById("name").value;
+//     // var pname = name1;
+//     // console.log(pname);
+//     recordname(pname);
+//     console.log(getname());
+//     // var s = document.getElementById("nameInput");
+//     // if(document.getElementById("pname").value != ""){
+//     //     s.style.display = "none";
+//     // }
+//
+// }
 
 
-function showHome(){
-    var s = document.getElementById("nameInput");
-    s.style.display = "block";
-}
+// function showHome(){
+//     var s = document.getElementById("nameInput");
+//     s.style.display = "block";
+// }
 
 //blablabla

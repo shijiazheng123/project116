@@ -18,6 +18,8 @@ eventlet.monkey_patch()
 usernameToSid = {}
 sidToUsername = {}
 
+
+
 # js_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # js_socket.connect(('localhost', 8000))
 
@@ -42,8 +44,17 @@ def got_message(username):
 @socket_server.on('start')
 def start():
     print("start")
+    # user_socket = usernameToSid.get(username, None)
+    # socket_server.emit('start', room=user_socket)
 
+# @socket_server.on('gotname')
+# def gotname(name):
+#     print(name)
+#
 
+@socket_server.on('name')
+def n(name):
+    print(name)
 
 # @socket_server.on('test')
 # def test(t):
@@ -55,11 +66,12 @@ def start():
 def game():
     if request.method == "POST":
         username = request.form.get('username')
-        print(username)
+        # print(username)
     else:
         username = "guest" + str(randint(0, 100000))
 
-    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', 'index.html')
+    # return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', 'index.html')
+    return render_template('index.html', username=username)
 
 @app.route('/')
 def index():
