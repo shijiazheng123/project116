@@ -64,7 +64,6 @@ def n(name):
 #     print(t)
 
 
-
 @app.route('/game', methods=["POST", "GET"])
 def game():
     if request.method == "POST":
@@ -78,11 +77,11 @@ def game():
 
 @app.route('/')
 def index():
-    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', 'startPage.html')
+    return send_from_directory('/Users/caseywhelan/IdeaProjects/project116cse/game', 'startPage.html')
 
 @app.route('/<path:filename>')
 def static_files(filename):
-    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', filename)
+    return send_from_directory('/Users/caseywhelan/IdeaProjects/project116cse/game', filename)
 
 
 
