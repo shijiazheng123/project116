@@ -8,6 +8,6 @@ db = mysql.connect(
     # connection: Connection = DriverManager.getConnection(url, username, password)
 )
 
-
+##
 
 print(db)
