@@ -15,6 +15,7 @@ function resetPlayer() {
     data.y = 0;
 }
 
+
 function scoreReset(){
     scorenum = 0;
 }
