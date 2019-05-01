@@ -131,6 +131,7 @@ def move(data):
     socket_server.emit('enemyMoved', json.dumps(message), broadcast=True, include_self=False)
 
 
+
 @app.route('/game', methods=["POST", "GET"])
 def game():
     if request.method == "POST":
@@ -144,16 +145,16 @@ def game():
 
 @app.route('/')
 def index():
-    return send_from_directory('/Users/caseywhelan/IdeaProjects/project116cse/game', 'startPage.html')
+    return send_from_directory('/Users/oukan/IdeaProjects/project116/game', 'startPage.html')
 
 @app.route('/<path:filename>')
 def static_files(filename):
-    return send_from_directory('/Users/caseywhelan/IdeaProjects/project116cse/game', filename)
+    return send_from_directory('/Users/oukan/IdeaProjects/project116/game', filename)
 
 
 
 # if __name__ == '__main__':
 #     app.run(debug=True, port=5000)
 
-print("listening on port 8080")
-socket_server.run(app, port=8080)
+print("listening on port")
+socket_server.run(app, port=8000)
