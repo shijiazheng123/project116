@@ -11,7 +11,7 @@ app.on('ready', () => {
         icon: path.join(__dirname, 'assets/player.png')});
 
     // load index.html
-    wind.loadFile("./index.html")
+    wind.loadFile("./server/templates/index.html")
         /*url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',

@@ -22,6 +22,15 @@ h2{
     font-size: 100%;
 }
 
+h3{
+    font-family: Geneva, Helvetica, sans-serif;
+    text-align: center;
+    margin-top: 0;
+    padding-top: 0;
+    color: #ff5050;
+    font-size: 50%;
+}
+
 #start{
     border-radius: 25px;
     border-style: solid;
