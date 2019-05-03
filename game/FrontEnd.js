@@ -11,6 +11,8 @@ var IdtoPlayers = {};
 var foodtoId = {};
 var yourId;
 var player;
+var currentPosX;
+var currentPosY;
 
 setUpSocket();
 
@@ -37,6 +39,8 @@ socket.on('message', function (event) {
 
     //player
     for(var i of Object.keys(yourInfo)){
+        currentPosX = yourInfo[i]['x'];
+        currentPosY = yourInfo[i]['y'];
         player = game.add.sprite(yourInfo[i]['x'], yourInfo[i]['y'],'player');
         game.physics.enable(player,Phaser.Physics.ARCADE);
         game.camera.follow(player);
@@ -87,22 +91,15 @@ socket.on('removePlayer', function (event) {
 socket.on('move', function (event) {
     var movedPlayer = JSON.parse(event);
     var key = Object.keys(movedPlayer);
-    if(key[0] === yourId){
-        yourInfo[yourId]['x'] = movedPlayer[key[0]]['x'];
-        yourInfo[yourId]['y'] = movedPlayer[key[0]]['y'];
-        var dist = Phaser.Math.distance(player.body.x, player.body.y,
-            movedPlayer[key[0]]['x'], movedPlayer[key[0]]['y']);
-        var duration = dist*3;
-        var tween = game.add.tween(player).to({x: movedPlayer[key[0]]['x'], y: movedPlayer[key[0]]['y']}, duration,
-            Phaser.Easing.Linear.None);
-        tween.start();
-    }else{
-        var distE = Phaser.Math.distance(IdtoPlayers[key[0]].body.x, IdtoPlayers[key[0]].body.y,
-            movedPlayer[key[0]]['x'], movedPlayer[key[0]]['y']);
-        var durationE = distE*3;
-        var tweenE = game.add.tween(IdtoPlayers[key[0]]).to({x: movedPlayer[key[0]]['x'], y: movedPlayer[key[0]]['y']}, durationE,
-            Phaser.Easing.Linear.None);
-        tweenE.start();
+    if(key[0] !== yourId){
+        IdtoPlayers[[key[0]]].position.x = movedPlayer[key[0]]['x'];
+        IdtoPlayers[[key[0]]].position.y = movedPlayer[key[0]]['y'];
+        // var distE = Phaser.Math.distance(IdtoPlayers[key[0]].body.x, IdtoPlayers[key[0]].body.y,
+        //     movedPlayer[key[0]]['x'], movedPlayer[key[0]]['y']);
+        // var durationE = distE*3;
+        // var tweenE = game.add.tween(IdtoPlayers[key[0]]).to({x: movedPlayer[key[0]]['x'], y: movedPlayer[key[0]]['y']}, durationE,
+        //     Phaser.Easing.Linear.None);
+        // tweenE.start();
     }
 });
 
@@ -205,8 +202,13 @@ var mainGame = {
     update: function(){
         Energy.energypercentage(meter);
 
-        if(game.input.mousePointer.justPressed(20)){
-            socket.emit('movePlayer', JSON.stringify({'x': game.input.worldX, 'y': game.input.worldY}));
+        if(game.input.mousePointer.justPressed(100)){
+            var dist = Phaser.Math.distance(player.body.x, player.body.y,
+                game.input.worldX, game.input.worldY);
+            var duration = dist*3;
+            var tween = game.add.tween(player).to({x: game.input.worldX, y: game.input.worldY}, duration,
+                Phaser.Easing.Linear.None);
+            tween.start();
         }
 
 
@@ -228,6 +230,11 @@ var mainGame = {
 
         if(playerExists){
             game.physics.arcade.overlap(player,food,foodcollect,null,this);
+            if(currentPosX != player.body.x || currentPosY != player.body.y){
+                socket.emit('movePlayer', JSON.stringify({'x': player.body.x, 'y': player.body.y}));
+                currentPosX = player.body.x;
+                currentPosY = player.body.y;
+            }
         }
 
         if(scorenum < 0){
