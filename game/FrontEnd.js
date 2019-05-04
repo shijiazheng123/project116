@@ -282,7 +282,7 @@ function foodcollect(player,food){
         }
         if(meter < 100){
             if(id.includes("G")){
-                meter = meter + 50;
+                meter = meter + 5;
                 scorenum = updateScore(scorenum,30);
             }else{
                 scorenum = updateScore(scorenum,-30);

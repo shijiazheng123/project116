@@ -9,7 +9,9 @@ let wind2;
 // create window when app is ready
 app.on('ready', () => {
     wind = new BrowserWindow({width: 1200, height: 1000,
-        icon: path.join(__dirname, 'assets/player.png')});
+        icon: path.join(__dirname, 'assets/player.png'), webPreferences: {
+            nodeIntegration: true
+        }});
 
     // load index.html
     // wind.loadFile("./test.html")
@@ -30,7 +32,9 @@ app.on('ready', () => {
     });
 
     wind2 = new BrowserWindow({width: 1200, height: 1000,
-        icon: path.join(__dirname, 'assets/player.png')});
+        icon: path.join(__dirname, 'assets/player.png'), webPreferences: {
+            nodeIntegration: true
+        }});
     wind2.loadURL("http://localhost:8080");
 
     wind2.webContents.openDevTools();

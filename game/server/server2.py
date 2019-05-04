@@ -34,12 +34,10 @@ SidToScore = {}
 
 foodkey = foodGenerator()
 playerinfo = {}
-highestScorer = {"username": "", "score": 0}
+highestScorer = Database.getHighestScore()
 # gameinfo = {'food': foodkey, "playerinfo": playerinfo}
 
 
-# js_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# js_socket.connect(('localhost', 8000))
 
 
 @socket_server.on('register')
@@ -54,12 +52,13 @@ def got_message(username):
 
 @socket_server.on('newPlayer')
 def newP():
-    # personal = {request.sid: {'x': randint(100, 2900), 'y': randint(100, 1400)}}
-    personal = {request.sid: {'x': 200, 'y': 200}}
+    personal = {request.sid: {'x': randint(100, 2900), 'y': randint(100, 1400)}}
+    # personal = {request.sid: {'x': 200, 'y': 200}}
     gameinfo = {'food': foodkey, 'playerinfo': playerinfo, 'personal': personal, 'highscore': highestScorer}
     socket_server.emit('message', json.dumps(gameinfo), room=request.sid)
     socket_server.emit('newP', json.dumps(personal), broadcast=True, include_self=False)
     playerinfo[request.sid] = personal[request.sid]
+    Database.createPlayer(sidToUsername[request.sid])
 
     print(playerinfo)
 
@@ -122,7 +121,9 @@ def poison(data):
     message = json.loads(data)
     key = str(randint(0,100000))
     foodkey[key] = message
+    Database.createFood(key, message['x'], message['y'])
     socket_server.emit('deleteFood', json.dumps({key: message}), broadcast=True)
+    print(foodkey[key])
 
 
 @app.route('/game', methods=["POST", "GET"])
@@ -139,11 +140,11 @@ def game():
 
 @app.route('/')
 def index():
-    return send_from_directory('/Users/oukan/IdeaProjects/project116/game', 'startPage.html')
+    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', 'startPage.html')
 
 @app.route('/<path:filename>')
 def static_files(filename):
-    return send_from_directory('/Users/oukan/IdeaProjects/project116/game', filename)
+    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', filename)
 
 
 print("listening on port 8080")

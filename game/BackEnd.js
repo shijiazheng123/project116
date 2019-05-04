@@ -53,8 +53,8 @@ function gety(){
 }
 
 function highscore(dataset){
-    var tempscore = 0
-    var tempplayer
+    var tempscore = 0;
+    var tempplayer;
     for(var id in dataset){
         var player = dataset[id];
         if(player.score > tempscore){
