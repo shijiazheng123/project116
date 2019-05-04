@@ -86,11 +86,12 @@ function addNewPlayer(info){
 socket.on('removePlayer', function (event) {
     if(onGame){
         var removedPlayer = JSON.parse(event);
-        if(removedPlayer != yourId){
+        if(removedPlayer != yourId && removedPlayer in IdtoPlayers){
             var deadPlayer = IdtoPlayers[removedPlayer];
             deadPlayer.destroy();
             delete IdtoPlayers[removedPlayer];
             delete playersInfo[removedPlayer];
+            console.log("removed "+ removedPlayer);
         }
     }
 });
@@ -203,7 +204,7 @@ var mainGame = {
     update: function(){
         Energy.energypercentage(meter);
 
-        if(game.input.mousePointer.justPressed(100)){
+        if(game.input.mousePointer.justPressed(50)){
             var dist = Phaser.Math.distance(player.body.x, player.body.y,
                 game.input.worldX, game.input.worldY);
             var duration = dist*3;

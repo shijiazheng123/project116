@@ -57,7 +57,8 @@ def newP():
 def removeP():
     if request.sid in sidToUsername:
         socket_server.emit('removePlayer', json.dumps(request.sid), broadcast=True)
-        # del playerinfo[request.sid]
+    if request.sid in playerinfo:
+        del playerinfo[request.sid]
     username = sidToUsername[request.sid]
     del sidToUsername[request.sid]
     del usernameToSid[username]
