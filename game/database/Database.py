@@ -4,11 +4,11 @@ import mysql.connector
 db = mysql.connector.connect(
      #fill this out with your database info
      user="root",
-     password="",
+     password="12345678",
      # url = "jdbc:mysql://localhost:3306",
      # username = "root",
      host='127.0.0.1',
-     database="test",
+     database="mysql",
      auth_plugin='mysql_native_password'
      # connection: Connection = DriverManager.getConnection(url, username, password)
 )

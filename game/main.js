@@ -2,6 +2,7 @@ const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const url = require('url');
 
+
 // window var
 let wind;
 let wind2;
@@ -15,12 +16,11 @@ app.on('ready', () => {
 
     // load index.html
     // wind.loadFile("./test.html")
-    wind.loadURL("http://localhost:8080")
+    wind.loadURL("http://localhost:8080");
         /*url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
         slashes:true*/
-    ;
 
 
     // include web contents
