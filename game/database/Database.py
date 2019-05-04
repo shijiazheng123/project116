@@ -8,7 +8,7 @@ db = mysql.connector.connect(
      # url = "jdbc:mysql://localhost:3306",
      # username = "root",
      host='127.0.0.1',
-     database="test",
+     database="mysql",
      auth_plugin='mysql_native_password'
      # connection: Connection = DriverManager.getConnection(url, username, password)
 )
@@ -52,32 +52,16 @@ def returnFood():
      sql = "SELECT * FROM food"
      cursor.execute(sql)
      data = cursor.fetchall()
-     print(data)
-#def updateHighest():
-#    sql = "SELECT username,score FROM players"
-#     cursor.execute(sql)
-#     data = cursor.fetchall()
-#     highScore = 0.0
-#     sql2=""
-#     for row in data:
-#          #print(row[1])
-#          if (row[1]>=highScore):
-     #              highScore=row[1]
-#               sql2 = "UPDATE players SET score='highScore' WHERE username='row[0]'"
-#     cursor.execute(sql2)
+     #print(data)
+     return data
 
-def updateHighest():
-    sql = "SELECT username,score FROM players"
-    cursor.execute(sql)
-    data = cursor.fetchall()
-    highScore = 0.0
-    sql2=""
-    for row in data:
-        #print(row[1])
-        if (row[1]>=highScore):
-            highScore=row[1]
-        sql2 = "UPDATE mysql.players SET score='highScore' WHERE username='row[0]'"
-    cursor.execute(sql2)
+def removePoisonFood(foodid):
+     sql2 = "DELETE FROM food WHERE food_id = %s"
+     cursor.execute(sql2, (foodid,))
+
+def update(username, score):
+     sql = "UPDATE players SET score=%s WHERE username=%s"
+     cursor.execute(sql, (username,score))
 
 def getHighestScore():
     sql = "SELECT username, score FROM players WHERE score = (SELECT MAX(score) FROM players)"
@@ -90,9 +74,11 @@ def getHighestScore():
 setupTable()
 createFood("12732", 2, 3)
 createFood("127323", 4, 3)
-returnFood()
-#createPlayer("jcvfdks")
+#print(returnFood())
+#removePoisonFood("12732")
+#print(returnFood())
+createPlayer("jcvfdks")
 #playerExists("jcvfdksf")
-#updateHighest()
+print(update("jcvfdks", 10))
 #db.commit()
 #db.close()
