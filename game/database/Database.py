@@ -4,11 +4,11 @@ import mysql.connector
 db = mysql.connector.connect(
      #fill this out with your database info
      user="root",
-     password="password",
+     password="",
      # url = "jdbc:mysql://localhost:3306",
      # username = "root",
      host='127.0.0.1',
-     database="mysql",
+     database="test",
      auth_plugin='mysql_native_password'
      # connection: Connection = DriverManager.getConnection(url, username, password)
 )
@@ -65,6 +65,27 @@ def returnFood():
      #              highScore=row[1]
 #               sql2 = "UPDATE players SET score='highScore' WHERE username='row[0]'"
 #     cursor.execute(sql2)
+
+def updateHighest():
+    sql = "SELECT username,score FROM players"
+    cursor.execute(sql)
+    data = cursor.fetchall()
+    highScore = 0.0
+    sql2=""
+    for row in data:
+        #print(row[1])
+        if (row[1]>=highScore):
+            highScore=row[1]
+        sql2 = "UPDATE mysql.players SET score='highScore' WHERE username='row[0]'"
+    cursor.execute(sql2)
+
+def getHighestScore():
+    sql = "SELECT username, score FROM players WHERE score = (SELECT MAX(score) FROM players)"
+    cursor.execute(sql)
+    data = cursor.fetchall()
+    playerdict = {"username" : data[0][0], "score" : data[0][1]}
+    playerdict
+    print(playerdict)
 
 setupTable()
 createFood("12732", 2, 3)

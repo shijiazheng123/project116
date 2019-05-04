@@ -6,7 +6,8 @@
     "start": "electron ."
   },
   "dependencies": {
-    "electron": "^4.1.2"
+    "electron": "^4.1.2",
+    "socket.io": "^1.7.3"
   },
   "window": {
     "toolbar": false,
