@@ -26,6 +26,7 @@ function setUpSocket() {
 
 function initialize(username) {
     console.log(username);
+    // recordname(username);
     socket.emit('register',username);
 }
 
@@ -39,19 +40,23 @@ socket.on('message', function (event) {
     console.log(event);
     var info = JSON.parse(event);
 
-    yourInfo = info['personal'];
+    // yourInfo = info['personal'];
     playersInfo = info['playerinfo'];
 
     //player
-    for(var i of Object.keys(yourInfo)){
-        currentPosX = yourInfo[i]['x'];
-        currentPosY = yourInfo[i]['y'];
-        player = game.add.sprite(yourInfo[i]['x'], yourInfo[i]['y'],'player');
+    for(var i of Object.keys(info['personal'])){
+        // currentPosX = yourInfo[i]['x'];
+        // currentPosY = yourInfo[i]['y'];
+        recordx(info['personal'][i]['x']);
+        recordy(info['personal'][i]['y']);
+        player = game.add.sprite(getx(), gety(),'player');
         game.physics.enable(player,Phaser.Physics.ARCADE);
         game.camera.follow(player);
         game.camera.deadzone = new Phaser.Rectangle(300, 150, 100, 100);
         player.body.collideWorldBounds = true;
-        yourId = i;
+
+        // yourId = i;
+        recordname(i);
         playerExists = true;
     }
 
@@ -63,6 +68,10 @@ socket.on('message', function (event) {
         var fo = food.create(info['food'][f]['x'], info['food'][f]['y'], 'food');
         foodtoId[f] = fo;
     }
+
+    var hs = info['highscore'];
+    var scores = document.getElementById("scoreboard");
+    scores.innerHTML = "<p>Employee of the month: " + hs['username'] +  " collected " + hs['score'] + " points</p>"
 });
 
 socket.on('newP', function (event) {
@@ -75,7 +84,7 @@ socket.on('newP', function (event) {
 });
 
 function addNewPlayer(info){
-    if(info[0] != yourId){
+    if(info[0] != getname()){
         var newEnemy = enemies.create(info[1]['x'], info[1]['y'], 'enemy');
         newEnemy.body.collideWorldBounds = true;
         IdtoPlayers[info[0]] = newEnemy;
@@ -86,7 +95,7 @@ function addNewPlayer(info){
 socket.on('removePlayer', function (event) {
     if(onGame){
         var removedPlayer = JSON.parse(event);
-        if(removedPlayer != yourId && removedPlayer in IdtoPlayers){
+        if(removedPlayer != getname() && removedPlayer in IdtoPlayers){
             var deadPlayer = IdtoPlayers[removedPlayer];
             deadPlayer.destroy();
             delete IdtoPlayers[removedPlayer];
@@ -99,7 +108,7 @@ socket.on('removePlayer', function (event) {
 socket.on('move', function (event) {
     var movedPlayer = JSON.parse(event);
     var key = Object.keys(movedPlayer);
-    if(key[0] !== yourId){
+    if(key[0] !== getname()){
         IdtoPlayers[[key[0]]].position.x = movedPlayer[key[0]]['x'];
         IdtoPlayers[[key[0]]].position.y = movedPlayer[key[0]]['y'];
     }
@@ -122,6 +131,12 @@ socket.on('deleteFood', function (event) {
     }
 
 
+});
+
+socket.on('highscore', function (event) {
+    var hiscore = JSON.parse(event);
+    var scores = document.getElementById("scoreboard");
+    scores.innerHTML = "<p>Employee of the month: " + hiscore['username'] +  " collected " + hiscore['score'] + " points</p>"
 });
 
 
@@ -224,7 +239,7 @@ var mainGame = {
 
         if(plantPoison.isDown){
             if(fireMode){
-                socket.emit('plantPoison', JSON.stringify({'x': player.body.x, 'y': yourInfo[yourId]['y'] = player.body.y - 150, 'eaten': false}));
+                socket.emit('plantPoison', JSON.stringify({'x': player.body.x, 'y': player.body.y - 150, 'eaten': false}));
                 fireMode = false;
                 meter = 0;
             }
@@ -232,10 +247,12 @@ var mainGame = {
 
         if(playerExists){
             game.physics.arcade.overlap(player,food,foodcollect,null,this);
-            if(currentPosX != player.body.x || currentPosY != player.body.y){
+            if(getx() != player.body.x || gety() != player.body.y){
                 socket.emit('movePlayer', JSON.stringify({'x': player.body.x, 'y': player.body.y}));
-                currentPosX = player.body.x;
-                currentPosY = player.body.y;
+                // currentPosX = player.body.x;
+                // currentPosY = player.body.y;
+                recordx(player.body.x);
+                recordy(player.body.y);
             }
         }
 
@@ -266,9 +283,9 @@ function foodcollect(player,food){
         if(meter < 100){
             if(id.includes("G")){
                 meter = meter + 50;
-                scorenum = scorenum + 30;
+                scorenum = updateScore(scorenum,30);
             }else{
-                scorenum = scorenum - 30;
+                scorenum = updateScore(scorenum,-30);
             }
             t.setText("Score: " + scorenum);
             Energy.energypercentage(meter);

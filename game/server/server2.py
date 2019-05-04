@@ -6,6 +6,14 @@ from random import randint
 
 from flask import Flask, send_from_directory, request, render_template
 from flask_socketio import SocketIO, emit
+
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+
+from game.database import Database
+
 app = Flask(__name__)
 socket_server = SocketIO(app)
 
@@ -26,6 +34,7 @@ SidToScore = {}
 
 foodkey = foodGenerator()
 playerinfo = {}
+highestScorer = {"username": "", "score": 0}
 # gameinfo = {'food': foodkey, "playerinfo": playerinfo}
 
 
@@ -47,10 +56,11 @@ def got_message(username):
 def newP():
     # personal = {request.sid: {'x': randint(100, 2900), 'y': randint(100, 1400)}}
     personal = {request.sid: {'x': 200, 'y': 200}}
-    gameinfo = {'food': foodkey, 'playerinfo': playerinfo, 'personal': personal}
+    gameinfo = {'food': foodkey, 'playerinfo': playerinfo, 'personal': personal, 'highscore': highestScorer}
     socket_server.emit('message', json.dumps(gameinfo), room=request.sid)
     socket_server.emit('newP', json.dumps(personal), broadcast=True, include_self=False)
     playerinfo[request.sid] = personal[request.sid]
+
     print(playerinfo)
 
 @socket_server.on('disconnect')
@@ -62,6 +72,7 @@ def removeP():
     username = sidToUsername[request.sid]
     del sidToUsername[request.sid]
     del usernameToSid[username]
+    del SidToScore[request.sid]
     print("disconnected")
     # print(playerinfo)
 
@@ -86,16 +97,24 @@ def lose():
 @socket_server.on('foodEaten')
 def eat(data):
     # print(foodkey)
+    username = sidToUsername[request.sid]
     if "G" in data:
         SidToScore[request.sid] += 30
         foodkey[data] = {"x": randint(100, 2900), "y": randint(100, 1400)}
         socket_server.emit('deleteFood', json.dumps({data: foodkey[data]}), broadcast=True)
+        if SidToScore[request.sid] > highestScorer["score"]:
+            highestScorer["username"] = username
+            highestScorer["score"] = SidToScore[request.sid]
+            socket_server.emit('highscore', json.dumps(highestScorer), broadcast=True)
     else:
         SidToScore[request.sid] -= 30
         foodkey[data]["eaten"] = True
         socket_server.emit('deleteFood', json.dumps({data: foodkey[data]}), broadcast=True)
         del foodkey[data]
+
+
     print('foodeaten ' + request.sid)
+    # socket_server.emit('updateScore', )
 
 
 
