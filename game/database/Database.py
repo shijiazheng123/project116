@@ -8,7 +8,7 @@ db = mysql.connector.connect(
      # url = "jdbc:mysql://localhost:3306",
      # username = "root",
      host='127.0.0.1',
-     database="mysql",
+     database="test",
      auth_plugin='mysql_native_password'
      # connection: Connection = DriverManager.getConnection(url, username, password)
 )
@@ -70,6 +70,10 @@ def getHighestScore():
     playerdict = {"username" : data[0][0], "score" : data[0][1]}
     playerdict
     print(playerdict)
+
+def removePlayer(user):
+    sql = "DELETE FROM players WHERE username = %s"
+    cursor.execute(sql, (user,))
 
 setupTable()
 createFood("12732", 2, 3)

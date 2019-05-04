@@ -117,7 +117,6 @@ def eat(data):
     # socket_server.emit('updateScore', )
 
 
-
 @socket_server.on('plantPoison')
 def poison(data):
     message = json.loads(data)
