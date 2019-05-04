@@ -43,6 +43,7 @@ def got_message(username):
 @socket_server.on('newPlayer')
 def newP():
     personal = {request.sid: {'x': randint(100, 2900), 'y': randint(100, 1400)}}
+    # personal = {request.sid: {'x': 200, 'y': 200}}
     gameinfo = {'food': foodkey, 'playerinfo': playerinfo, 'personal': personal}
     socket_server.emit('message', json.dumps(gameinfo), room=request.sid)
     socket_server.emit('newP', json.dumps(personal), broadcast=True, include_self=False)

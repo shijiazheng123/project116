@@ -14,20 +14,20 @@ var player;
 var currentPosX;
 var currentPosY;
 
-setUpSocket();
-
-
-function setUpSocket() {
-    socket.on('connect', function (event) {
-        socket.send('Hello Server!');
-    });
-
-}
-
-function initialize(username) {
-    console.log(username);
-    socket.emit('register',username);
-}
+// setUpSocket();
+//
+//
+// function setUpSocket() {
+//     socket.on('connect', function (event) {
+//         socket.send('Hello Server!');
+//     });
+//
+// }
+//
+// function initialize(username) {
+//     console.log(username);
+//     socket.emit('register',username);
+// }
 
 socket.on('message', function (event) {
     console.log("connected");
@@ -94,12 +94,6 @@ socket.on('move', function (event) {
     if(key[0] !== yourId){
         IdtoPlayers[[key[0]]].position.x = movedPlayer[key[0]]['x'];
         IdtoPlayers[[key[0]]].position.y = movedPlayer[key[0]]['y'];
-        // var distE = Phaser.Math.distance(IdtoPlayers[key[0]].body.x, IdtoPlayers[key[0]].body.y,
-        //     movedPlayer[key[0]]['x'], movedPlayer[key[0]]['y']);
-        // var durationE = distE*3;
-        // var tweenE = game.add.tween(IdtoPlayers[key[0]]).to({x: movedPlayer[key[0]]['x'], y: movedPlayer[key[0]]['y']}, durationE,
-        //     Phaser.Easing.Linear.None);
-        // tweenE.start();
     }
 });
 
