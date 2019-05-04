@@ -121,11 +121,11 @@ def game():
 
 @app.route('/')
 def index():
-    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', 'startPage.html')
+    return send_from_directory('/Users/oukan/IdeaProjects/project116/game', 'startPage.html')
 
 @app.route('/<path:filename>')
 def static_files(filename):
-    return send_from_directory('/Users/MasPosInc/IdeaProjects/projectcse116/game', filename)
+    return send_from_directory('/Users/oukan/IdeaProjects/project116/game', filename)
 
 
 print("listening on port 8080")

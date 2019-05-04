@@ -1,0 +1,18 @@
+{
+  "main": "main.js",
+  "name": "Chef",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^4.1.2"
+  },
+  "window": {
+    "toolbar": false,
+    "resizable": true,
+    "fullscreen": true,
+    "width": 1100,
+    "height": 600
+  }
+}
