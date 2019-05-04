@@ -51,8 +51,23 @@ h3{
     right: 0;
 }
 
+#Back{
+    width: 100px;
+    height: 50px;
+    margin-top: 0px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.button{
+    font-size: 18px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 br {
     display: block; /* makes it have a width */
     content: ""; /* clears default height */
     margin-top: 0;
 }
+
+

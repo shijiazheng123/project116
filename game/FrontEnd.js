@@ -14,20 +14,25 @@ var player;
 var currentPosX;
 var currentPosY;
 
-// setUpSocket();
-//
-//
-// function setUpSocket() {
-//     socket.on('connect', function (event) {
-//         socket.send('Hello Server!');
-//     });
-//
-// }
-//
-// function initialize(username) {
-//     console.log(username);
-//     socket.emit('register',username);
-// }
+setUpSocket();
+
+
+function setUpSocket() {
+    socket.on('connect', function (event) {
+        socket.send('Hello Server!');
+    });
+
+}
+
+function initialize(username) {
+    console.log(username);
+    socket.emit('register',username);
+}
+
+function goBack(){
+    var back = document.getElementById("scoreboard");
+    back.innerHTML = "<button class= \"button\" type=\"button\" onclick=\"location.href='http://localhost:8080';\">Play Again</button>"
+}
 
 socket.on('message', function (event) {
     console.log("connected");
@@ -79,12 +84,14 @@ function addNewPlayer(info){
 }
 
 socket.on('removePlayer', function (event) {
-    var removedPlayer = JSON.parse(event);
-    if(removedPlayer != yourId){
-        var deadPlayer = IdtoPlayers[removedPlayer];
-        deadPlayer.destroy();
-        delete IdtoPlayers[removedPlayer];
-        delete playersInfo[removedPlayer];
+    if(onGame){
+        var removedPlayer = JSON.parse(event);
+        if(removedPlayer != yourId){
+            var deadPlayer = IdtoPlayers[removedPlayer];
+            deadPlayer.destroy();
+            delete IdtoPlayers[removedPlayer];
+            delete playersInfo[removedPlayer];
+        }
     }
 });
 
@@ -238,6 +245,7 @@ var mainGame = {
     },
     start: function () {
         socket.emit('lose');
+        goBack();
         game.state.start('gameOver');
     }
 
@@ -256,7 +264,7 @@ function foodcollect(player,food){
         }
         if(meter < 100){
             if(id.includes("G")){
-                meter = meter + 5;
+                meter = meter + 50;
                 scorenum = scorenum + 30;
             }else{
                 scorenum = scorenum - 30;

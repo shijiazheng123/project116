@@ -39,11 +39,14 @@ def got_message(username):
     sidToUsername[request.sid] = username
     SidToScore[request.sid] = 0
     print(username + " connected")
+    print(usernameToSid)
+    print(sidToUsername)
+    print(SidToScore)
 
 @socket_server.on('newPlayer')
 def newP():
-    personal = {request.sid: {'x': randint(100, 2900), 'y': randint(100, 1400)}}
-    # personal = {request.sid: {'x': 200, 'y': 200}}
+    # personal = {request.sid: {'x': randint(100, 2900), 'y': randint(100, 1400)}}
+    personal = {request.sid: {'x': 200, 'y': 200}}
     gameinfo = {'food': foodkey, 'playerinfo': playerinfo, 'personal': personal}
     socket_server.emit('message', json.dumps(gameinfo), room=request.sid)
     socket_server.emit('newP', json.dumps(personal), broadcast=True, include_self=False)
@@ -54,10 +57,11 @@ def newP():
 def removeP():
     if request.sid in sidToUsername:
         socket_server.emit('removePlayer', json.dumps(request.sid), broadcast=True)
-        del playerinfo[request.sid]
+        # del playerinfo[request.sid]
     username = sidToUsername[request.sid]
     del sidToUsername[request.sid]
     del usernameToSid[username]
+    print("disconnected")
     # print(playerinfo)
 
 @socket_server.on('movePlayer')
@@ -73,8 +77,9 @@ def lose():
         socket_server.emit('removePlayer', json.dumps(request.sid), broadcast=True)
         del playerinfo[request.sid]
     username = sidToUsername[request.sid]
-    del sidToUsername[request.sid]
-    del usernameToSid[username]
+    # del sidToUsername[request.sid]
+    # del usernameToSid[username]
+    del SidToScore[request.sid]
     # print(playerinfo)
 
 @socket_server.on('foodEaten')
@@ -89,6 +94,7 @@ def eat(data):
         foodkey[data]["eaten"] = True
         socket_server.emit('deleteFood', json.dumps({data: foodkey[data]}), broadcast=True)
         del foodkey[data]
+    print('foodeaten ' + request.sid)
 
 
 
