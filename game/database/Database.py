@@ -48,6 +48,8 @@ def playerExists(user):
      #print(canCreate)
      if canCreate:
           createPlayer(user)
+
+# Return food table
 def returnFood():
      sql = "SELECT * FROM food"
      cursor.execute(sql)
