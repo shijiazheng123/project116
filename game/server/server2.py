@@ -26,6 +26,8 @@ def foodGenerator():
     for i in range(30):
         label = "G" + str(i)
         foodkey[label] = {"x": randint(100, 2900), "y": randint(100, 1400)}
+    for f in Database.returnFood():
+        foodkey[f[0]] = {"x": f[1], "y": f[2]}
     return foodkey
 
 usernameToSid = {}
@@ -52,8 +54,8 @@ def got_message(username):
 
 @socket_server.on('newPlayer')
 def newP():
-    personal = {request.sid: {'x': randint(100, 2900), 'y': randint(100, 1400)}}
-    # personal = {request.sid: {'x': 200, 'y': 200}}
+    # personal = {request.sid: {'x': randint(100, 2900), 'y': randint(100, 1400)}}
+    personal = {request.sid: {'x': 200, 'y': 200}}
     gameinfo = {'food': foodkey, 'playerinfo': playerinfo, 'personal': personal, 'highscore': highestScorer}
     socket_server.emit('message', json.dumps(gameinfo), room=request.sid)
     socket_server.emit('newP', json.dumps(personal), broadcast=True, include_self=False)
@@ -68,10 +70,11 @@ def removeP():
         socket_server.emit('removePlayer', json.dumps(request.sid), broadcast=True)
     if request.sid in playerinfo:
         del playerinfo[request.sid]
+        Database.removePlayer(sidToUsername[request.sid])
+        del SidToScore[request.sid]
     username = sidToUsername[request.sid]
     del sidToUsername[request.sid]
     del usernameToSid[username]
-    del SidToScore[request.sid]
     print("disconnected")
     # print(playerinfo)
 
@@ -87,6 +90,7 @@ def lose():
     if request.sid in sidToUsername:
         socket_server.emit('removePlayer', json.dumps(request.sid), broadcast=True)
         del playerinfo[request.sid]
+        Database.removePlayer(sidToUsername[request.sid])
     username = sidToUsername[request.sid]
     # del sidToUsername[request.sid]
     # del usernameToSid[username]
@@ -110,7 +114,8 @@ def eat(data):
         foodkey[data]["eaten"] = True
         socket_server.emit('deleteFood', json.dumps({data: foodkey[data]}), broadcast=True)
         del foodkey[data]
-
+        Database.removePoisonFood(data)
+    Database.update(username, SidToScore[request.sid])
 
     print('foodeaten ' + request.sid)
     # socket_server.emit('updateScore', )

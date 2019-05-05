@@ -1,7 +1,7 @@
 // var Phaser = Phaser || {};
 
 
-// var socket = io.connect({transports: ['websocket']});
+var socket = io.connect({transports: ['websocket']});
 var game = new Phaser.Game(800,500,Phaser.AUTO,'game');
 
 //information
@@ -9,31 +9,32 @@ var yourInfo;
 var playersInfo = {};
 var IdtoPlayers = {};
 var foodtoId = {};
-var yourId;
+var registered = false;
 var player;
 var currentPosX;
 var currentPosY;
 
-// setUpSocket();
-//
-//
-// function setUpSocket() {
-//     socket.on('connect', function (event) {
-//         socket.send('Hello Server!');
-//     });
-//
-// }
-//
-// function initialize(username) {
-//     console.log(username);
-//     // recordname(username);
-//     socket.emit('register',username);
-// }
-//
-// function goBack(){
-//     var back = document.getElementById("scoreboard");
-//     back.innerHTML = "<button class= \"button\" type=\"button\" onclick=\"location.href='http://localhost:8080';\">Play Again</button>"
-// }
+setUpSocket();
+
+
+function setUpSocket() {
+    socket.on('connect', function (event) {
+        socket.send('Hello Server!');
+    });
+
+}
+
+function initialize(username) {
+    console.log(username);
+    // recordname(username);
+    socket.emit('register',username);
+    registered = true;
+}
+
+function goBack(){
+    var back = document.getElementById("scoreboard");
+    back.innerHTML = "<button class= \"button\" type=\"button\" onclick=\"location.href='http://localhost:8080';\">Play Again</button>"
+}
 
 socket.on('message', function (event) {
     console.log("connected");
@@ -202,7 +203,6 @@ var mainGame = {
         //control to plant bad food
         plantPoison = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
-        socket.emit('newPlayer');
 
         //energy bar and scores
         scoreBar = ("Score:" + scorenum);
@@ -217,6 +217,11 @@ var mainGame = {
         Energy.fixedToCamera = true;
     },
     update: function(){
+
+        if(registered && !playerExists && onGame){
+            socket.emit('newPlayer');
+        }
+
         Energy.energypercentage(meter);
 
         if(game.input.mousePointer.justPressed(50)){

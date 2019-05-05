@@ -1,7 +1,7 @@
 const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const url = require('url');
-
+// const remote = require('remote');
 
 // window var
 let wind;
@@ -17,6 +17,8 @@ app.on('ready', () => {
     // load index.html
     // wind.loadFile("./test.html")
     wind.loadURL("http://localhost:8080");
+    const ses = wind.webContents.session.clearCache(function() {
+    });
         /*url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
@@ -36,6 +38,8 @@ app.on('ready', () => {
             nodeIntegration: true
         }});
     wind2.loadURL("http://localhost:8080");
+    const ses2 = wind2.webContents.session.clearCache(function() {
+    });
 
     wind2.webContents.openDevTools();
 

@@ -23,17 +23,20 @@ def setupTable():
      sql2 = "CREATE TABLE IF NOT EXISTS food (food_id TEXT, x DOUBLE, y DOUBLE)"
      cursor.execute(sql)
      cursor.execute(sql2)
+     db.commit()
 
 def createPlayer(user):
      sql = "INSERT INTO players (username, score) VALUES(%s, %s)"
      data = (user, 0.0)
      cursor.execute(sql, data)
+     db.commit()
 
 # Create food data
 def createFood(foodid, x, y):
      sql = "INSERT INTO food (food_id, x, y) VALUES(%s, %s,%s)"
      data = (foodid, x, y)
      cursor.execute(sql, data)
+     db.commit()
 
 def playerExists(user):
      sql = "SELECT username FROM players"
@@ -48,39 +51,47 @@ def playerExists(user):
      #print(canCreate)
      if canCreate:
           createPlayer(user)
+     db.commit()
 
 # Return food table
 def returnFood():
      sql = "SELECT * FROM food"
      cursor.execute(sql)
      data = cursor.fetchall()
-     #print(data)
+     print(data)
+     db.commit()
      return data
 
 def removePoisonFood(foodid):
      sql2 = "DELETE FROM food WHERE food_id = %s"
      cursor.execute(sql2, (foodid,))
+     db.commit()
 
 def update(username, score):
      sql = "UPDATE players SET score=%s WHERE username=%s"
      cursor.execute(sql, (username,score))
+     db.commit()
 
 def getHighestScore():
     sql = "SELECT username, score FROM players WHERE score = (SELECT MAX(score) FROM players)"
     cursor.execute(sql)
     data = cursor.fetchall()
-    playerdict = {"username" : data[0][0], "score" : data[0][1]}
-    playerdict
+    playerdict = {"username": data[0][0], "score": data[0][1]}
     print(playerdict)
+    db.commit()
+    return playerdict
 
 def removePlayer(user):
     sql = "DELETE FROM players WHERE username = %s"
     cursor.execute(sql, (user,))
+    db.commit()
 
 setupTable()
-createFood("12732", 2, 3)
-createFood("127323", 4, 3)
+
+# createFood("12732", 2, 3)
+# createFood("127323", 4, 3)
 returnFood()
+db.commit()
 #createPlayer("jcvfdks")
 #playerExists("jcvfdksf")
 #updateHighest()
