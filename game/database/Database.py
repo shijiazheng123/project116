@@ -4,7 +4,7 @@ import mysql.connector
 db = mysql.connector.connect(
      #fill this out with your database info
      user="root",
-     password="12345678",
+     password="",
      # url = "jdbc:mysql://localhost:3306",
      # username = "root",
      host='127.0.0.1',
@@ -19,7 +19,7 @@ sql = ""
 
 def setupTable():
      # cursor.execute("DROP TABLE IF EXISTS players")
-     sql = "CREATE TABLE IF NOT EXISTS players (username TEXT, score DOUBLE)"
+     sql = "CREATE TABLE IF NOT EXISTS players (username TEXT, score INT)"
      sql2 = "CREATE TABLE IF NOT EXISTS food (food_id TEXT, x DOUBLE, y DOUBLE)"
      cursor.execute(sql)
      cursor.execute(sql2)
@@ -100,7 +100,13 @@ setupTable()
 # createFood("12732", 2, 3)
 # createFood("127323", 4, 3)
 returnFood()
+removePlayer("jcvfdks")
+removePlayer("casey")
+removePlayer("jcvfdks")
+removePlayer('jcvfdksf')
+print(returnPlayers())
 db.commit()
+
 #createPlayer("jcvfdks")
 #playerExists("jcvfdksf")
 #updateHighest()
