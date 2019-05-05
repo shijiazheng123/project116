@@ -62,6 +62,15 @@ def returnFood():
      db.commit()
      return data
 
+# Return player table for testing
+def returnPlayers():
+     sql = "SELECT * FROM players"
+     cursor.execute(sql)
+     data = cursor.fetchall()
+     #print(data)
+     db.commit()
+     return data
+
 def removePoisonFood(foodid):
      sql2 = "DELETE FROM food WHERE food_id = %s"
      cursor.execute(sql2, (foodid,))
