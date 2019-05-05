@@ -15,11 +15,12 @@ db = mysql.connector.connect(
 
 ##
 cursor = db.cursor()
+curB = db.cursor(buffered=True)
 sql = ""
 
 def setupTable():
      # cursor.execute("DROP TABLE IF EXISTS players")
-     sql = "CREATE TABLE IF NOT EXISTS players (username TEXT, score INT)"
+     sql = "CREATE TABLE IF NOT EXISTS players (username TEXT, score INTEGER)"
      sql2 = "CREATE TABLE IF NOT EXISTS food (food_id TEXT, x DOUBLE, y DOUBLE)"
      cursor.execute(sql)
      cursor.execute(sql2)
@@ -27,7 +28,7 @@ def setupTable():
 
 def createPlayer(user):
      sql = "INSERT INTO players (username, score) VALUES(%s, %s)"
-     data = (user, 0.0)
+     data = (user, 0)
      cursor.execute(sql, data)
      db.commit()
 
@@ -76,9 +77,10 @@ def removePoisonFood(foodid):
      cursor.execute(sql2, (foodid,))
      db.commit()
 
-def update(username, score):
+def update(user1, score1):
      sql = "UPDATE players SET score=%s WHERE username=%s"
-     cursor.execute(sql, (username,score))
+     insert = "INSERT INTO players (username, score) VALUES (%s,%s)"
+     cursor.execute(sql, (score1,user1))
      db.commit()
 
 def getHighestScore():
@@ -92,6 +94,7 @@ def getHighestScore():
 
 def removePlayer(user):
     sql = "DELETE FROM players WHERE username = %s"
+
     cursor.execute(sql, (user,))
     db.commit()
 
@@ -103,7 +106,9 @@ returnFood()
 removePlayer("jcvfdks")
 removePlayer("casey")
 removePlayer("jcvfdks")
-removePlayer('jcvfdksf')
+removePlayer('ugh')
+#createPlayer("ugh")
+update("ugh", 10)
 print(returnPlayers())
 db.commit()
 
