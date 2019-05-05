@@ -47,6 +47,7 @@ def got_message(username):
     usernameToSid[username] = request.sid
     sidToUsername[request.sid] = username
     SidToScore[request.sid] = 0
+    Database.createPlayer(sidToUsername[request.sid])
     print(username + " connected")
     print(usernameToSid)
     print(sidToUsername)
@@ -57,11 +58,9 @@ def newP():
     # personal = {request.sid: {'x': randint(100, 2900), 'y': randint(100, 1400)}}
     personal = {request.sid: {'x': 200, 'y': 200}}
     gameinfo = {'food': foodkey, 'playerinfo': playerinfo, 'personal': personal, 'highscore': highestScorer}
+    playerinfo[request.sid] = personal[request.sid]
     socket_server.emit('message', json.dumps(gameinfo), room=request.sid)
     socket_server.emit('newP', json.dumps(personal), broadcast=True, include_self=False)
-    playerinfo[request.sid] = personal[request.sid]
-    Database.createPlayer(sidToUsername[request.sid])
-
     print(playerinfo)
 
 @socket_server.on('disconnect')
@@ -70,7 +69,7 @@ def removeP():
         socket_server.emit('removePlayer', json.dumps(request.sid), broadcast=True)
     if request.sid in playerinfo:
         del playerinfo[request.sid]
-        Database.removePlayer(sidToUsername[request.sid])
+    if request.sid in SidToScore:
         del SidToScore[request.sid]
     username = sidToUsername[request.sid]
     del sidToUsername[request.sid]
@@ -90,7 +89,6 @@ def lose():
     if request.sid in sidToUsername:
         socket_server.emit('removePlayer', json.dumps(request.sid), broadcast=True)
         del playerinfo[request.sid]
-        Database.removePlayer(sidToUsername[request.sid])
     username = sidToUsername[request.sid]
     # del sidToUsername[request.sid]
     # del usernameToSid[username]
@@ -117,6 +115,7 @@ def eat(data):
         Database.removePoisonFood(data)
     Database.update(username, SidToScore[request.sid])
 
+    print(SidToScore[request.sid])
     print('foodeaten ' + request.sid)
     # socket_server.emit('updateScore', )
 

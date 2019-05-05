@@ -13,6 +13,7 @@ var registered = false;
 var player;
 var currentPosX;
 var currentPosY;
+var start = false;
 
 setUpSocket();
 
@@ -37,6 +38,7 @@ function goBack(){
 }
 
 socket.on('message', function (event) {
+    start = true;
     console.log("connected");
     console.log(event);
     var info = JSON.parse(event);
@@ -73,6 +75,8 @@ socket.on('message', function (event) {
     var hs = info['highscore'];
     var scores = document.getElementById("scoreboard");
     scores.innerHTML = "<p>Employee of the month: " + hs['username'] +  " collected " + hs['score'] + " points</p>"
+
+
 });
 
 socket.on('newP', function (event) {
@@ -160,11 +164,29 @@ var t; //text
 //statuses
 var fireMode;
 var playerExists = false;
-
+var poisoned = false;
 //controls
 var plantPoison;
 
 
+// var loading={
+//     init: function () {
+//         game.stage.disableVisibilityChange = true; //stops game from pausing when tab is inactive
+//     },
+//     create:function(){
+//
+//         game.stage.backgroundColor = "#fff";
+//         var t = game.add.text(50,150,"please wait");
+//     },
+//     update:function () {
+//         if(start){
+//             this.start();
+//         }
+//     },
+//     start: function () {
+//         game.state.start('mainGame');
+//     }
+// };
 
 
 var mainGame = {
@@ -215,12 +237,15 @@ var mainGame = {
 
         Energy = new energy();
         Energy.fixedToCamera = true;
+
+        socket.emit('newPlayer');
+
     },
     update: function(){
 
-        if(registered && !playerExists && onGame){
-            socket.emit('newPlayer');
-        }
+        // if(registered && !playerExists && onGame){
+        //     socket.emit('newPlayer');
+        // }
 
         Energy.energypercentage(meter);
 
@@ -261,18 +286,19 @@ var mainGame = {
             }
         }
 
-        if(scorenum < 0){
-            this.start();
+        if(scorenum < 0 && poisoned){
+            gameOver();
         }
 
-    },
-    start: function () {
-        socket.emit('lose');
-        goBack();
-        game.state.start('gameOver');
     }
 
 };
+
+function gameOver(){
+    socket.emit('lose');
+    goBack();
+    game.state.start('gameOver');
+}
 
 function foodcollect(player,food){
     if(!fireMode){
@@ -287,10 +313,16 @@ function foodcollect(player,food){
         }
         if(meter < 100){
             if(id.includes("G")){
-                meter = meter + 5;
+                meter = meter + 50;
+                // meter = meter + 5;
                 scorenum = updateScore(scorenum,30);
             }else{
-                scorenum = updateScore(scorenum,-30);
+                if(scorenum <= 0){
+                    poisoned = true;
+                    gameOver();
+                }else{
+                    scorenum = updateScore(scorenum,-30);
+                }
             }
             t.setText("Score: " + scorenum);
             Energy.energypercentage(meter);
@@ -316,6 +348,7 @@ var gameoverscreen = {
 
 game.state.add('mainGame',mainGame);
 game.state.add('gameOver',gameoverscreen);
+// game.state.add('loading',loading);
 game.state.start('mainGame');
 
 

@@ -4,7 +4,7 @@ import mysql.connector
 db = mysql.connector.connect(
      #fill this out with your database info
      user="root",
-     password="",
+     password="12345678",
      # url = "jdbc:mysql://localhost:3306",
      # username = "root",
      host='127.0.0.1',
@@ -15,7 +15,6 @@ db = mysql.connector.connect(
 
 ##
 cursor = db.cursor()
-curB = db.cursor(buffered=True)
 sql = ""
 
 def setupTable():
@@ -106,9 +105,7 @@ returnFood()
 removePlayer("jcvfdks")
 removePlayer("casey")
 removePlayer("jcvfdks")
-removePlayer('ugh')
-#createPlayer("ugh")
-update("ugh", 10)
+removePlayer('jcvfdksf')
 print(returnPlayers())
 db.commit()
 
