@@ -139,9 +139,11 @@ socket.on('deleteFood', function (event) {
 });
 
 socket.on('highscore', function (event) {
-    var hiscore = JSON.parse(event);
-    var scores = document.getElementById("scoreboard");
-    scores.innerHTML = "<p>Employee of the month: " + hiscore['username'] +  " collected " + hiscore['score'] + " points</p>"
+    if(onGame){
+        var hiscore = JSON.parse(event);
+        var scores = document.getElementById("scoreboard");
+        scores.innerHTML = "<p>Employee of the month: " + hiscore['username'] +  " collected " + hiscore['score'] + " points</p>"
+    }
 });
 
 
@@ -313,8 +315,8 @@ function foodcollect(player,food){
         }
         if(meter < 100){
             if(id.includes("G")){
-                meter = meter + 50;
-                // meter = meter + 5;
+                // meter = meter + 50;
+                meter = meter + 10;
                 scorenum = updateScore(scorenum,30);
             }else{
                 if(scorenum <= 0){
